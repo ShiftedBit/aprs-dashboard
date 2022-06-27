@@ -1,6 +1,6 @@
 import {
   MessageBody,
-  OnGatewayConnection,
+  OnGatewayConnection, OnGatewayDisconnect,
   OnGatewayInit,
   SubscribeMessage,
   WebSocketGateway,
@@ -8,9 +8,10 @@ import {
 } from "@nestjs/websockets";
 import {Logger} from "@nestjs/common";
 import {AprsService} from "../aprs-service/aprs.service";
+import {Server, Socket} from "socket.io";
 
 @WebSocketGateway({ cors: true })
-export class AprsGateway implements OnGatewayInit, OnGatewayConnection {
+export class AprsGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
 
   constructor(private aprsService: AprsService) {}
 
@@ -22,15 +23,20 @@ export class AprsGateway implements OnGatewayInit, OnGatewayConnection {
       Logger.log(message);
   }
 
-  afterInit(server: any): any {
-    Logger.log('Websocket started', 'WebSocketsController');
+  afterInit(server: Server): void {
+    Logger.log('Websocket started', server.path());
     this.server.emit('message', 'Start');
 
     this.aprsService.openSocket();
     this.aprsService.stream.subscribe(value => this.server.emit('message', value));
   }
 
-  handleConnection(client: any): any {
-    Logger.log('Client connected', client.id);
+  handleConnection(client: Socket): void {
+    client.emit('message', 'Hi ' + client.id);
+    Logger.log('Client connected', client);
+  }
+
+  handleDisconnect(client: Socket): void {
+    Logger.log('Client disconnected', client.id);
   }
 }
