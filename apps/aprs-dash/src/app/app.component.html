@@ -1,7 +1,11 @@
 <div style="text-align: center">
   <h1>Welcome to aprs-dash!</h1>
-  <label><input [(ngModel)]="filter"> Filter</label>
-  <button (click)="initAprsConnection()">Init</button>
+
+  <mat-form-field class="example-full-width" appearance="legacy">
+    <mat-label>Filter</mat-label>
+    <input matInput [(ngModel)]="filter">
+  </mat-form-field>
+  <button mat-flat-button color="primary" (click)="initAprsConnection()">Init</button>
   <ul *ngFor="let message of messages">
     <li>{{message}}</li>
   </ul>

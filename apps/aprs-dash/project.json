@@ -5,7 +5,9 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/aprs-dash",
         "index": "apps/aprs-dash/src/index.html",
@@ -17,7 +19,10 @@
           "apps/aprs-dash/src/favicon.ico",
           "apps/aprs-dash/src/assets"
         ],
-        "styles": ["apps/aprs-dash/src/styles.scss"],
+        "styles": [
+          "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
+          "apps/aprs-dash/src/styles.scss"
+        ],
         "scripts": []
       },
       "configurations": {
@@ -85,7 +90,9 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/aprs-dash"],
+      "outputs": [
+        "coverage/apps/aprs-dash"
+      ],
       "options": {
         "jestConfig": "apps/aprs-dash/jest.config.ts",
         "passWithNoTests": true
