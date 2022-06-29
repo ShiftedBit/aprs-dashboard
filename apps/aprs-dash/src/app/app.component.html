@@ -1,9 +1,8 @@
 <div style="text-align: center">
   <h1>Welcome to aprs-dash!</h1>
-  <img
-    width="450"
-    src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png"
-    alt="Nx - Smart, Fast and Extensible Build System"
-  />
+  <label><input [(ngModel)]="filter"> Filter</label>
+  <button (click)="initAprsConnection()">Init</button>
+  <ul *ngFor="let message of messages">
+    <li>{{message}}</li>
+  </ul>
 </div>
-<div>Message: {{ hello$ | async | json }}</div>

@@ -1,8 +1,5 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Message } from '@aprs-dashboard/api-interfaces';
 import {Socket} from "ngx-socket-io";
-import {map} from "rxjs";
 
 @Component({
   selector: 'aprs-dashboard-root',
@@ -10,15 +7,23 @@ import {map} from "rxjs";
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  hello$ = this.http.get<Message>('/api/hello');
-  constructor(private http: HttpClient, public socket: Socket) {
+
+  messages: string[] = [];
+  filter: string | undefined = "r/48.201754/16.326165/10";
+
+  constructor(public socket: Socket) {
     this.socket.emit('message', 'Hi');
     this.getMessage().subscribe(value => {
-      console.log(value);
+      this.messages.push(value as string);
     })
   }
 
   getMessage() {
-    return this.socket.fromEvent('message');
+    return this.socket.fromEvent('packet');
+  }
+
+  initAprsConnection() {
+    this.socket.connect();
+    this.socket.emit('initAprsGateway', { filter: this.filter });
   }
 }

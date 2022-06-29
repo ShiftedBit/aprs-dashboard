@@ -17,13 +17,13 @@ export class AprsService {
   public stream: Subject<string> = new Subject<string>();
   public room: string;
 
-  constructor(room: string) {
-    this.openSocket(room);
+  constructor(room: string, filter: string) {
+    this.openSocket(room, filter);
   }
 
-  openSocket(room: string) {
+  openSocket(room: string, filter: string) {
     this.room = room;
-    this.connection = new ISSocket(this.APRSSERVER, this.PORTNUMBER, this.CALLSIGN, this.PASSCODE, this.FILTER);
+    this.connection = new ISSocket(this.APRSSERVER, this.PORTNUMBER, this.CALLSIGN, this.PASSCODE, filter);
     this.connection.connect();
     Logger.log('APRS IS Connection opened for ' + this.room, 'AprsService');
     this.connection.on('connect', () => {

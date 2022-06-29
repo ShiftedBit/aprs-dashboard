@@ -1,4 +1,5 @@
 import {
+  ConnectedSocket,
   MessageBody,
   OnGatewayConnection, OnGatewayDisconnect,
   OnGatewayInit,
@@ -27,20 +28,24 @@ export class AprsGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
       Logger.log(message);
   }
 
+  @SubscribeMessage('initAprsGateway')
+  handleInitAprsGateway(@MessageBody() message: { filter: string }, @ConnectedSocket() client: Socket): void {
+    this.users[client.id] = new AprsService(client.id, message.filter);
+    this.users[client.id].stream.subscribe((packet) => {
+      client.emit('packet', packet);
+    })
+    Logger.log('AprsGateway initialized for ' + client.id , 'AprsGateway');
+    Logger.log('Current clients', Object.keys(this.users).length, 'AprsGateway');
+  }
+
   afterInit(server: Server): void {
     Logger.log('Websocket started', server.path());
     this.server.emit('message', 'Start');
   }
 
   handleConnection(client: Socket): void {
-    this.users[client.id] = new AprsService(client.id);
-    this.users[client.id].stream.subscribe((packet) => {
-      client.emit('message', packet);
-    })
-
     client.emit('message', 'Hi ' + client.id);
     Logger.log('Client connected: ' + client.id, 'AprsGateway');
-    Logger.log('Current clients', Object.keys(this.users).length, 'AprsGateway');
   }
 
   handleDisconnect(client: Socket): void {
