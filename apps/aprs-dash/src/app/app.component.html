@@ -1,12 +1,17 @@
-<div style="text-align: center">
-  <h1>Welcome to aprs-dash!</h1>
-
+<div>
   <mat-form-field class="example-full-width" appearance="legacy">
     <mat-label>Filter</mat-label>
     <input matInput [(ngModel)]="filter">
   </mat-form-field>
   <button mat-flat-button color="primary" (click)="initAprsConnection()">Init</button>
-  <ul *ngFor="let message of messages">
-    <li>{{message}}</li>
-  </ul>
+  <button mat-flat-button color="secondary" (click)="disconnect()">Disconnect</button>
+</div>
+<div fxLayout="row wrap" fxLayoutGap="10px">
+  <mat-card class="card" *ngFor="let message of messages.reverse()">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>{{ message }}</mat-card-title>
+      <mat-card-subtitle>Markus</mat-card-subtitle>
+    </mat-card-header>
+  </mat-card>
 </div>

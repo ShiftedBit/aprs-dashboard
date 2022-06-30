@@ -30,7 +30,7 @@ export class AprsGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   @SubscribeMessage('initAprsGateway')
   handleInitAprsGateway(@MessageBody() message: { filter: string }, @ConnectedSocket() client: Socket): void {
-    this.users[client.id] = new AprsService(client.id, message.filter);
+    this.users[client.id] = new AprsService(client.id);
     this.users[client.id].stream.subscribe((packet) => {
       client.emit('packet', packet);
     })

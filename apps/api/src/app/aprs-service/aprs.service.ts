@@ -9,7 +9,7 @@ export class AprsService {
   PASSCODE = -1;
   APRSSERVER = 'rotate.aprs2.net';
   PORTNUMBER = 14580;
-  FILTER = 'r/48.201754/16.326165/10';
+  FILTER = 'r/48.201754/16.326165/50';
 
   private connection: ISSocket;
   private parser = new aprsParser();
@@ -17,13 +17,13 @@ export class AprsService {
   public stream: Subject<string> = new Subject<string>();
   public room: string;
 
-  constructor(room: string, filter: string) {
-    this.openSocket(room, filter);
+  constructor(room: string) {
+    this.openSocket(room);
   }
 
-  openSocket(room: string, filter: string) {
+  openSocket(room: string) {
     this.room = room;
-    this.connection = new ISSocket(this.APRSSERVER, this.PORTNUMBER, this.CALLSIGN, this.PASSCODE, filter);
+    this.connection = new ISSocket(this.APRSSERVER, this.PORTNUMBER, this.CALLSIGN, this.PASSCODE, this.FILTER);
     this.connection.connect();
     Logger.log('APRS IS Connection opened for ' + this.room, 'AprsService');
     this.connection.on('connect', () => {

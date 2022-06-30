@@ -24,6 +24,13 @@ export class AppComponent {
 
   initAprsConnection() {
     this.socket.connect();
+    this.socket.on('connect_error', () => {
+      console.log('error');
+    })
     this.socket.emit('initAprsGateway', { filter: this.filter });
+  }
+
+  disconnect() {
+    this.socket.disconnect();
   }
 }
